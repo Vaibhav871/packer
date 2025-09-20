@@ -2,8 +2,8 @@ name: Build Nomad AMI
 
 on:
   push:
-    paths:
-      - 'packer/**'
+    branches:
+      - main
 
 jobs:
   build-ami:
