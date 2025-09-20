@@ -30,7 +30,7 @@ jobs:
           sudo apt-get update && sudo apt-get install packer -y
 
       - name: Validate Packer Template
-        run: packer validate packer/nomad-server.pkr.hcl
+        run: packer validate scripts/nomad-server.pkr.hcl
 
       - name: Build AMI with Packer
         run: packer build -var-file=scripts/variables.pkr.hcl scripts/nomad-server.pkr.hcl
