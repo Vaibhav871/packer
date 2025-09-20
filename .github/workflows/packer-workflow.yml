@@ -1,0 +1,44 @@
+name: Build Nomad AMI
+
+on:
+  push:
+    paths:
+      - 'packer/**'
+
+jobs:
+  build-ami:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: 'ap-south-1'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install Packer
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install packer -y
+
+      - name: Validate Packer Template
+        run: packer validate packer/nomad-server.pkr.hcl
+
+      - name: Build AMI with Packer
+        run: packer build -var-file=packer/variables.pkr.hcl packer/nomad-server.pkr.hcl
+
+      - name: Notify Success
+        if: success()
+        run: echo "Build succeeded for Nomad AMI"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "Build failed for Nomad AMI"
