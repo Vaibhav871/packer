@@ -45,3 +45,4 @@ jobs:
       - name: Notify Failure
         if: failure()
         run: echo "Build failed for Nomad AMI"
+        
