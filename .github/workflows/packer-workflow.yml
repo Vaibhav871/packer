@@ -29,6 +29,9 @@ jobs:
           sudo apt-add-repository "deb https://apt.releases.hashicorp.com $(lsb_release -cs) main"
           sudo apt-get update && sudo apt-get install packer -y
 
+      - name: Initialize Packer Plugins
+        run: packer init nomad-server.pkr.hcl
+
       - name: Validate Packer Template
         run: packer validate nomad-server.pkr.hcl
 
