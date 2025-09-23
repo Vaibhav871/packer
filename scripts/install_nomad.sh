@@ -10,6 +10,7 @@ sudo apt-get update -y
 echo "Installing dependencies..."
 sudo apt-get install -y unzip curl jq docker.io
 
+
 echo "Installing Nomad version $NOMAD_VERSION..."
 cd /tmp
 curl -O ${NOMAD_DOWNLOAD_URL}
